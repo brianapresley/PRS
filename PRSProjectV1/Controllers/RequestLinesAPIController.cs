@@ -55,6 +55,9 @@ namespace PRSProjectV1.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                //call recalculate
+                var success = RecalculateRequestTotal(id);
+                if (!success) { return this.StatusCode(500); }
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -77,6 +80,9 @@ namespace PRSProjectV1.Controllers
         {
             _context.RequestLine.Add(requestLine);
             await _context.SaveChangesAsync();
+            //Call Recalculate
+            var success = RecalculateRequestTotal(requestLine.RequestId);
+            if (!success) { return this.StatusCode(500); }
 
             return CreatedAtAction("GetRequestLine", new { id = requestLine.Id }, requestLine);
         }
@@ -93,7 +99,9 @@ namespace PRSProjectV1.Controllers
 
             _context.RequestLine.Remove(requestLine);
             await _context.SaveChangesAsync();
-
+            //call recalculate
+            var success = RecalculateRequestTotal(id);
+            if ( !success ) { return this.StatusCode(500); }
             return requestLine;
         }
 
@@ -118,6 +126,7 @@ namespace PRSProjectV1.Controllers
                 request.Status = "Revised";
 
             _context.SaveChanges();
+
             return true;
         }
     }

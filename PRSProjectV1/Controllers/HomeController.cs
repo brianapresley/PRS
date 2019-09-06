@@ -11,6 +11,9 @@ namespace PRSProjectV1.Controllers {
         public IActionResult Index() {
             return View();
         }
+        public IActionResult Products() {
+            return View();
+        }
 
         public IActionResult Privacy() {
             return View();
